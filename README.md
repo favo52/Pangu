@@ -1,2 +1,2 @@
 # Pongu
-Pong game for learning how to make games
+Pong game using SFML and C++ for learning and programming practice.
