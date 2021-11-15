@@ -1,24 +1,23 @@
 #include "Paddle.h"
 #include "Utility.h"
+#include "ResourceHolder.h"
 
 #include <SFML/System/Time.hpp>
 
-namespace pangu
+namespace Pangu
 {
-	Paddle::Paddle(const sf::Vector2f& size, const sf::Color& color) :
-		m_Shape{ size },
+	Paddle::Paddle(const TextureHolder& textures) :
+		m_Sprite{ textures.Get(Textures::Paddle) },
+		m_AI{ true },
 		m_Velocity{ sf::Vector2f(0.0f, 0.0f) },
 		m_Acceleration{ 0.0f }
 	{
-		m_Shape.setFillColor(color);
-		m_Shape.setOutlineThickness(-5.0f);
-		m_Shape.setOutlineColor(sf::Color::Black);
-		centerOrigin(m_Shape);
+		centerOrigin(m_Sprite);
 	}
 
 	void Paddle::update(const float& dt)
 	{
-		constexpr float frictionModifier{ 10.0f };
+		constexpr float frictionModifier{ 3.5f };
 		constexpr float movementModifier{ 0.5f };
 
 		// player friction
@@ -26,7 +25,7 @@ namespace pangu
 		acceleration -= m_Velocity.y * frictionModifier; // decrease acceleration
 
 		// player movement
-		m_Shape.move(sf::Vector2f(0.0f, m_Shape.getPosition().y - (m_Shape.getPosition().y + m_Velocity.y * dt + acceleration * dt * dt * movementModifier)));
+		m_Sprite.move(sf::Vector2f(0.0f, m_Sprite.getPosition().y - (m_Sprite.getPosition().y + m_Velocity.y * dt + acceleration * dt * dt * movementModifier)));
 
 		// speed
 		m_Velocity.y = m_Velocity.y + acceleration * dt;
@@ -34,19 +33,19 @@ namespace pangu
 
 	void Paddle::checkArenaCollision(const sf::FloatRect& bounds)
 	{
-		constexpr float arenaBorder{ 50.0f };
-		constexpr float paddleHalfSizeY{ 75.0f };
+		float paddleHalfSizeY{ m_Sprite.getLocalBounds().height / 2.0f };
+		constexpr float arenaBorder{ 60.0f };
 		constexpr float bounceModifier{ 0.25f };
-
+		
 		// player collision top and bottom
-		if (m_Shape.getPosition().y < bounds.top + (arenaBorder + paddleHalfSizeY))
+		if (m_Sprite.getPosition().y < bounds.top + (arenaBorder + paddleHalfSizeY))
 		{
-			m_Shape.setPosition(sf::Vector2f(m_Shape.getPosition().x, (bounds.top + arenaBorder) + paddleHalfSizeY));
+			m_Sprite.setPosition(sf::Vector2f(m_Sprite.getPosition().x, (bounds.top + arenaBorder) + paddleHalfSizeY));
 			m_Velocity.y *= -bounceModifier; // bounce off wall
 		}
-		else if (m_Shape.getPosition().y > bounds.height - (arenaBorder + paddleHalfSizeY))
+		else if (m_Sprite.getPosition().y > bounds.height - (arenaBorder + paddleHalfSizeY))
 		{
-			m_Shape.setPosition(sf::Vector2f(m_Shape.getPosition().x, (bounds.height - arenaBorder) - paddleHalfSizeY));
+			m_Sprite.setPosition(sf::Vector2f(m_Sprite.getPosition().x, (bounds.height - arenaBorder) - paddleHalfSizeY));
 			m_Velocity.y *= -bounceModifier; // bounce off wall
 		}
 	}
@@ -82,13 +81,13 @@ namespace pangu
 		return &m_Acceleration;
 	}
 
-	sf::RectangleShape* Paddle::getShape()
+	sf::Sprite* Paddle::getSprite()
 	{
-		return &m_Shape;
+		return &m_Sprite;
 	}
 
 	sf::FloatRect Paddle::getPosition()
 	{
-		return m_Shape.getGlobalBounds();;
+		return m_Sprite.getGlobalBounds();;
 	}
 }

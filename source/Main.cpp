@@ -1,4 +1,5 @@
-#include "Game.h"
+//#include "Game.h"
+#include "Application.h"
 
 #include <stdexcept>
 #include <iostream>
@@ -6,8 +7,11 @@
 int main(int argc, char* argv)
 try
 {
-    pangu::Game game;
-    game.run();
+    //pangu::Game game;
+    //game.run();
+
+    Pangu::Application App;
+    App.Run();
 
     return 0;
 }

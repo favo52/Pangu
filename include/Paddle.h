@@ -1,6 +1,8 @@
 #pragma once
 
-#include <SFML/Graphics/RectangleShape.hpp>
+#include "ResourceIdentifiers.h"
+
+#include <SFML/Graphics/Sprite.hpp>
 
 // Forward declaration
 namespace sf
@@ -8,15 +10,18 @@ namespace sf
 	class Time;
 }
 
-namespace pangu
+namespace Pangu
 {
 	class Paddle
 	{
 	public:
-		Paddle(const sf::Vector2f& size, const sf::Color& color);
+		Paddle(const TextureHolder& textures);
 
 		void update(const float& dt);
 		void checkArenaCollision(const sf::FloatRect& bounds);
+
+		inline void setAI(bool isAI) { m_AI = isAI; }
+		const bool isAI() const { return m_AI; };
 
 		void setVelocity(sf::Vector2f velocity);
 		void setVelocity(float vx, float vy);
@@ -27,12 +32,13 @@ namespace pangu
 		const float getAcceleration() const;
 		float* getAccelerationPtr();
 
-		sf::RectangleShape* getShape();
+		sf::Sprite* getSprite();
 
 		sf::FloatRect getPosition();
 
 	private:
-		sf::RectangleShape	m_Shape;
+		sf::Sprite m_Sprite;
+		bool m_AI;
 
 		sf::Vector2f m_Velocity;
 		float m_Acceleration;

@@ -13,7 +13,7 @@ namespace sf
 	class Color;
 }
 
-namespace pangu
+namespace Pangu
 {	
 	void setText(sf::Text& text, const sf::Font& font, const std::string& str, unsigned int size, sf::Color color);
 

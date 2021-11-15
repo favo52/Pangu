@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SFML/Graphics/CircleShape.hpp>
+//#include <SFML/Graphics/Sprite.hpp>
 
 #include "Paddle.h"
 
@@ -10,12 +10,12 @@ namespace sf
 	class Time;
 }
 
-namespace pangu
+namespace Pangu
 {
 	class Ball
 	{
 	public:
-		Ball(const float& radius, const sf::Color& color);
+		Ball(const TextureHolder& textures);
 		~Ball();
 
 		void update(float dt);
@@ -29,7 +29,7 @@ namespace pangu
 
 		const sf::Vector2f getVelocity() const;
 
-		sf::CircleShape* getShape();
+		sf::Sprite* getSprite();
 
 		sf::FloatRect getPosition();
 
@@ -38,7 +38,7 @@ namespace pangu
 								 float p2x, float p2y, float hs2x, float hs2y);
 
 	private:
-		sf::CircleShape m_Shape;
+		sf::Sprite m_Sprite;
 		float m_Radius;
 
 		sf::Vector2f m_Velocity;
